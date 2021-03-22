@@ -3,6 +3,9 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 app.use(cors());
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}));
 
 // setup mongoose
 const mongoose = require('mongoose');
@@ -20,6 +23,11 @@ mongoose.connect(
   }
 )
 .catch(error => console.error(error));
+
+// requiring our routes
+const routes = require('./routes');
+const router = routes(express.Router());
+app.use(router);
 
 // adding error handling
 const { handle404s, errorHandler } = require('./errorHandling');
